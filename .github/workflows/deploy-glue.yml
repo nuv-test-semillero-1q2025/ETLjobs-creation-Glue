@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: test_glue
+        working-directory: ETLJob-creation
 
     steps:
 
