@@ -36,9 +36,9 @@ jobs:
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
           SCRIPT_LOCATION=$(echo $CONFIG | jq -r '.Command.ScriptLocation')
-          
+
           aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
-          aws s3 cp test_glue/job_1.py $SCRIPT_LOCATION
+          aws s3 cp ./test_glue/job_1.py $SCRIPT_LOCATION
         
       - name: Create or Update Glue Job
         run: |
