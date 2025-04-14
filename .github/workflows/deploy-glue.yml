@@ -1,0 +1,65 @@
+name: Deploy AWS Glue Jobs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Instalar jq
+        run: sudo apt-get install jq -y
+
+      - name: Cargar variables del Glue Job
+        run: |
+          source test_glue/glue_config.env
+          echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
+          echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
+          echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
+
+
+      - name: Configurar AWS credenciales via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::891377180652:role/GitHubActionsOIDC-DeployRole
+          aws-region: us-east-1
+
+      - name: Check if Glue job exists
+        run: |
+          aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
+
+      - name: Upload Glue Scripts to S3
+        run: |
+          aws s3 cp test_glue/job_1.py $SCRIPT_LOCATION
+        
+      - name: Create or Update Glue Job
+        run: |
+          cd test_glue
+          
+          if aws glue get-job --job-name $JOB_NAME; then
+            echo "Job exists, updating..."
+            aws glue update-job \
+              --job-name $JOB_NAME \
+              --job-update file://config.json
+          else
+
+            echo "Job does not exist, creating..."
+
+            DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
+            
+            aws glue create-job \
+              --name $JOB_NAME \
+              --role $ROL_ARN \
+              --command "{\"Name\":\"glueetl\",\"ScriptLocation\":\"$SCRIPT_LOCATION\"}" \
+              --default-arguments "$DEFAULT_ARGS" \
+          fi
+
+

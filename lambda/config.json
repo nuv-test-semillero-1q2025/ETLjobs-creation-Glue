@@ -1,9 +1,0 @@
-{
-    "FunctionName": "nuv-test-nueva_lambda",
-    "Runtime": "python3.9",
-    "Role": "arn:aws:iam::891377180652:role/nuv-test-github-test",  
-    "Handler": "lambda_function.lambda_handler",
-    "Timeout": 15,
-    "MemorySize": 128
-  }
-  

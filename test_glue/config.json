@@ -1,0 +1,22 @@
+{
+    "Name": "example-glue-job",
+    "Role": "arn:aws:iam::891377180652:role/nuv-test-glue-policy",
+    "Command": {
+      "Name": "glueetl",
+      "ScriptLocation": "s3://nuv-test-script-bucket/glue_jobs/job_1.py",
+      "PythonVersion": "3"
+    },
+    "DefaultArguments": {
+      "--TempDir": "s3://nuv-test-temp-bucket/glue/temp/",
+      "--input_bucket": "",
+      "--output_bucket": "",
+      "--additional-python-modules": ""
+    },
+    "MaxCapacity": 2, 
+    "Timeout": 2880, 
+    "MaxRetries": 3,  
+    "Type": "spark",  
+    "GlueVersion": "5.0", 
+    "SecurityConfiguration": "",  
+    "Connections": []
+  }
