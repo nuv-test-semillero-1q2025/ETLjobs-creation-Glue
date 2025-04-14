@@ -20,6 +20,7 @@ jobs:
 
       - name: Cargar variables del Glue Job
         run: |
+          echo "Cargando variables de entorno..."
           if [ -d "test_glue" ]; then
             cd test_glue
             source glue_config.env
