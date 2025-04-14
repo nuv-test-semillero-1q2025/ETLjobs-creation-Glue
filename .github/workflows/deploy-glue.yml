@@ -22,12 +22,17 @@ jobs:
       - name: Cargar variables del Glue Job
         run: |
           echo "Cargando variables de entorno..."
-          set -a
-          source ETLjobs-creation-Glue/test_glue/glue_config.env
-          set +a
-          echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
-          echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
-          echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
+          if [ -f ETLjobs-creation-Glue/test_glue/glue_config.env ]; then
+            set -a
+            source ETLjobs-creation-Glue/test_glue/glue_config.env
+            set +a
+            echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
+            echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
+            echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
+          else
+            echo "Error: El archivo 'glue_config.env' no existe en la ruta esperada."
+            exit 1
+          fi
 
 
 
