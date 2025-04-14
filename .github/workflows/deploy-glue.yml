@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "Cargando variables de entorno..."
           pwd
-          source glue_config.env
+          source test_glue/glue_config.env
           echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
           echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
           echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
