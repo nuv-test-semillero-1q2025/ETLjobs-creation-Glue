@@ -19,23 +19,6 @@ jobs:
         run: 
           sudo apt-get install jq -y
 
-      - name: Cargar variables del Glue Job
-        run: |
-          echo "Cargando variables de entorno..."
-          if [ -f ETLjobs-creation-Glue/test_glue/glue_config.env ]; then
-            set -a
-            source ETLjobs-creation-Glue/test_glue/glue_config.env
-            set +a
-            echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
-            echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
-            echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
-          else
-            echo "Error: El archivo 'glue_config.env' no existe en la ruta esperada."
-            exit 1
-          fi
-
-
-
       - name: Configurar AWS credenciales via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -44,16 +27,23 @@ jobs:
 
       - name: Check if Glue job exists
         run: |
+          cd test_glue
+          CONFIG=$(cat config.json)
+          JOB_NAME=$(echo $CONFIG | jq -r '.Name')
           aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
 
       - name: Upload Glue Scripts to S3
         run: |
+          CONFIG=$(cat config.json)
+          SCRIPT_LOCATION=$(echo $CONFIG | jq -r '.Command.ScriptLocation')
           aws s3 cp test_glue/job_1.py $SCRIPT_LOCATION
         
       - name: Create or Update Glue Job
         run: |
           cd test_glue
           
+          CONFIG=$(cat config.json)
+          JOB_NAME=$(echo $CONFIG | jq -r '.Name')
           if aws glue get-job --job-name $JOB_NAME; then
             echo "Job exists, updating..."
             aws glue update-job \
@@ -64,7 +54,9 @@ jobs:
             echo "Job does not exist, creating..."
 
             DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
-
+            
+          CONFIG=$(cat config.json)
+          JOB_NAME=$(echo $CONFIG | jq -r '.Name')
             aws glue create-job \
               --name $JOB_NAME \
               --role $ROL_ARN \
