@@ -43,21 +43,20 @@ jobs:
       - name: Create or Update Glue Job
         run: |
           cd test_glue
+
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
+          SCRIPT_LOCATION=$(echo "$CONFIG" | jq -r '.Command.ScriptLocation')
+          DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
+          ROL_ARN="arn:aws:iam::891377180652:role/nuv-test-glue-policy"
+
           if aws glue get-job --job-name $JOB_NAME; then
             echo "Job exists, updating..."
             aws glue update-job \
               --job-name $JOB_NAME \
               --job-update file://config.json
           else
-
             echo "Job does not exist, creating..."
-
-            DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
-            
-          CONFIG=$(cat config.json)
-          JOB_NAME=$(echo $CONFIG | jq -r '.Name')
             aws glue create-job \
               --name $JOB_NAME \
               --role $ROL_ARN \
