@@ -20,6 +20,7 @@ jobs:
 
       - name: Cargar variables del Glue Job
         run: |
+          cd test_glue
           source test_glue/glue_config.env
           echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
           echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
@@ -54,7 +55,7 @@ jobs:
             echo "Job does not exist, creating..."
 
             DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
-            
+
             aws glue create-job \
               --name $JOB_NAME \
               --role $ROL_ARN \
