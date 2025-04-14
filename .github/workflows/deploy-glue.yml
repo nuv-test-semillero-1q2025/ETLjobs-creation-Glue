@@ -34,6 +34,7 @@ jobs:
 
       - name: Upload Glue Scripts to S3
         run: |
+          cd test_glue
           CONFIG=$(cat config.json)
           SCRIPT_LOCATION=$(echo $CONFIG | jq -r '.Command.ScriptLocation')
           aws s3 cp test_glue/job_1.py $SCRIPT_LOCATION
