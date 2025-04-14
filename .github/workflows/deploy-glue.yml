@@ -21,16 +21,16 @@ jobs:
       - name: Cargar variables del Glue Job
         run: |
           echo "Cargando variables de entorno..."
-          if [ -d "test_glue" ]; then
-            cd test_glue
-            source glue_config.env
-            echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
-            echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
-            echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
-          else
-            echo "Error: Directory 'test_glue' does not exist."
-            exit 1
-          fi
+          pwd
+          ls
+          cd test_glue
+          
+          source glue_config.env
+          pwd
+          echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
+          echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
+          echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
+
 
 
       - name: Configurar AWS credenciales via OIDC
