@@ -27,9 +27,7 @@ jobs:
 
       - name: Check if Glue job exists
         run: |
-          cd test_glue
           pwd
-          cd test_glue
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
           aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
