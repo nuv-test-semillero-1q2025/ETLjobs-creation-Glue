@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "Cargando variables de entorno..."
           set -a
-          source test_glue/glue_config.env
+          source ETLjobs-creation-Glue/test_glue/glue_config.env
           set +a
           echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
           echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
