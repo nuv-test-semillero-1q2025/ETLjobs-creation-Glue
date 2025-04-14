@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./ETLJob-creation
+        working-directory: ./test_glue
 
     steps:
 
@@ -24,10 +24,6 @@ jobs:
       - name: Cargar variables del Glue Job
         run: |
           echo "Cargando variables de entorno..."
-          pwd
-          ls
-          cd test_glue
-          
           source glue_config.env
           pwd
           echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
