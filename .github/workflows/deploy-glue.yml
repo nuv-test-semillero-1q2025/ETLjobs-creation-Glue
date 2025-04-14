@@ -50,7 +50,7 @@ jobs:
           DEFAULT_ARGS=$(jq '.DefaultArguments' config.json)
           ROL_ARN="arn:aws:iam::891377180652:role/nuv-test-glue-policy"
 
-          if aws glue get-job --job-name $JOB_NAME; then
+          if aws glue get-job --job-name $JOB_NAME > /dev/null 2>&1; then
             echo "Job exists, updating..."
             aws glue update-job \
               --job-name $JOB_NAME \
