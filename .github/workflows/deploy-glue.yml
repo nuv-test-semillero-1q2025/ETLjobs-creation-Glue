@@ -18,6 +18,9 @@ jobs:
       - name: Instalar jq
         run: 
           sudo apt-get install jq -y
+
+      - name: Cargar variables del Glue Job
+        run: |
           echo "Cargando variables de entorno..."
           set -a
           source test_glue/glue_config.env
