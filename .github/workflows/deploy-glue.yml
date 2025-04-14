@@ -21,8 +21,9 @@ jobs:
       - name: Cargar variables del Glue Job
         run: |
           echo "Cargando variables de entorno..."
-          ls -la
-          source glue_config.env
+          set -a
+          source test_glue/glue_config.env
+          set +a
           echo "JOB_NAME=$JOB_NAME" >> $GITHUB_ENV
           echo "SCRIPT_LOCATION=$SCRIPT_LOCATION" >> $GITHUB_ENV
           echo "ROL_ARN=$ROL_ARN" >> $GITHUB_ENV
