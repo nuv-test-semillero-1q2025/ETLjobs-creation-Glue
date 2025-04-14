@@ -27,6 +27,7 @@ jobs:
 
       - name: Check if Glue job exists
         run: |
+          pwd
           cd test_glue
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
