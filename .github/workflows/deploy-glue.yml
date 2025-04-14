@@ -35,19 +35,14 @@ jobs:
 
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
-          aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
-
-      - name: Upload Glue Scripts to S3
-        run: |
-          cd test_glue
-          CONFIG=$(cat config.json)
           SCRIPT_LOCATION=$(echo $CONFIG | jq -r '.Command.ScriptLocation')
+          
+          aws glue get-job --job-name $JOB_NAME || echo "Job does not exist"
           aws s3 cp test_glue/job_1.py $SCRIPT_LOCATION
         
       - name: Create or Update Glue Job
         run: |
           cd test_glue
-          
           CONFIG=$(cat config.json)
           JOB_NAME=$(echo $CONFIG | jq -r '.Name')
           if aws glue get-job --job-name $JOB_NAME; then
